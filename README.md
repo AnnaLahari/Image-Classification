@@ -139,45 +139,38 @@ Test the trained model on new/unseen FashionMNIST images.
 
 ### Name: A.LAHARI
 ### Register Number: 212223230111
+
 ```python
 class CNNClassifier(nn.Module):
     def __init__(self):
         super(CNNClassifier, self).__init__()
         # write your code here
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3, padding=1)
-        self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, padding=1)
-        self.conv3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1)
-        self.conv4 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1)
-        self.pool = nn.AvgPool2d(kernel_size=2, stride=2)
-        self.fc1 = nn.Linear(128*3*3, 256)
-        self.fc2 = nn.Linear(256,128)
-        self.fc3 = nn.Linear(128,64)
-        self.fc4 = nn.Linear(64,10)
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, padding=1)  # Changed in_channel to in_channels and out_channel to out_channels
+        self.conv2 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1)  # Changed in_channel to in_channels and out_channel to out_channels
+        self.conv3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1)  # Changed in_channel to in_channels and out_channel to out_channels
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.fc1 = nn.Linear(128 * 3 * 3, 128)
+        self.fc2 = nn.Linear(128, 64)
+        self.fc3 = nn.Linear(64, 10)
 
     def forward(self, x):
         # write your code here
         x = self.pool(torch.relu(self.conv1(x)))
         x = self.pool(torch.relu(self.conv2(x)))
         x = self.pool(torch.relu(self.conv3(x)))
-        x = torch.relu(self.conv4(x))
-        x = x.view(x.size(0), -1)
+        x = torch.flatten(x, start_dim=1)
         x = torch.relu(self.fc1(x))
         x = torch.relu(self.fc2(x))
-        x = torch.relu(self.fc3(x))
-        x = self.fc4(x)
+        x = self.fc3(x)
         return x
-
-
 
 ```
 
 ```python
-
 # Initialize model, loss function, and optimizer
 model = CNNClassifier()
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
-
 ```
 
 ```python
@@ -201,27 +194,34 @@ def train_model(model, train_loader, num_epochs=3):
 
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {running_loss/len(train_loader):.4f}')
 
+
+
 ```
 
 ## OUTPUT
 ### Training Loss per Epoch
 
-<img width="305" height="133" alt="image" src="https://github.com/user-attachments/assets/d8f5adc2-5ecb-4e40-bba8-576159e90ca9" />
+<img width="273" height="118" alt="image" src="https://github.com/user-attachments/assets/1fdf4ebe-37a9-44fa-b4cd-c45724dee20a" />
+
 
 ### Confusion Matrix
 
-<img width="758" height="703" alt="image" src="https://github.com/user-attachments/assets/8281839b-556a-441f-8e82-afeea84d01a4" />
+<img width="706" height="661" alt="image" src="https://github.com/user-attachments/assets/6d2cf452-60c1-4ba0-b6bf-7963c96e83c8" />
+
 
 
 ### Classification Report
 
-<img width="537" height="428" alt="image" src="https://github.com/user-attachments/assets/35a2d1ea-6ff5-4db4-b642-b3279479f9cf" />
+
+<img width="430" height="341" alt="image" src="https://github.com/user-attachments/assets/4a237514-80ea-4d5e-b2a9-c60ddaebfeb0" />
+
 
 
 
 ### New Sample Data Prediction
 
-<img width="512" height="619" alt="image" src="https://github.com/user-attachments/assets/1cb52d4f-cd34-44ad-88bb-cc8c078f1645" />
+<img width="388" height="473" alt="image" src="https://github.com/user-attachments/assets/8495f684-71b7-4850-8f50-d7cdc3a03410" />
+
 
 
 ## RESULT
